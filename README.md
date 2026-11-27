@@ -5,20 +5,24 @@ Turn an idea into a `REQUIREMENTS.md` a coding agent can build from, plus clicka
 It is a **skill first** and a web app second.
 
 ```
-skill/      the clearspec skill: SKILL.md, references, templates, check/render scripts
+skills/clearspec/  the clearspec skill: SKILL.md, references, templates, check/render scripts
 cli-app/    the `clearspec` npm package: the helper behind `npx clearspec connect`
 web-app/    the hosted app: React UI + Cloudflare Worker with Durable Objects
 ```
 
 ## 1. The skill (Claude Code)
 
-Copy `skill/` into a project as `.claude/skills/clearspec/` (the folder name must match the skill name), then run `/clearspec "an app for roommates to split shared bills"`. Output goes to `clearspec/<name>/`:
+Install it into a project with `npx skills add RaamPrashathT/clearspec`, or copy `skills/clearspec/` into `.claude/skills/clearspec/` by hand, then run `/clearspec "an app for roommates to split shared bills"`. Output goes to `clearspec/<name>/`:
 
 ```
 clearspec/<name>/
 ├── REQUIREMENTS.md      intent, decisions, phases, requirements (FR), edge cases (EC), assumptions
-└── mockups/             UI screens, or api.html + openapi.yaml, or cli.html + transcripts.md
+└── mockups/             UI: wireframes (index.html compare page, SCR-*.html, specs/) · API: api.html + openapi.yaml · CLI: cli.html + transcripts.md
 ```
+
+### UI mockups are wireframes
+
+For UI, the agent writes small JSON screen specs and a fixed grayscale component kit draws them (it never writes HTML or CSS). `mockups/index.html` shows every screen at three densities (Dense, Standard, Roomy) with the measured page height; pick one per screen and press **Finalize selected**. That saves the chosen set to `mockups/final/` and adds a "UI mockups" section to the end of `REQUIREMENTS.md`, so whoever builds the UI knows to refer to it. `check.mjs` verifies every Must requirement and every edge case appears on a screen. Tooling lives in `skills/clearspec/scripts/wireframe/`.
 
 ## 2. The web app
 
